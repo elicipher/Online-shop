@@ -1,9 +1,9 @@
 from django import forms
-from models import User
+from .models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-class UserCreationForm(forms.modelform):#we will use in admin panel
+class UserCreationForm(forms.ModelForm):#we will use in admin panel
     password1 = forms.CharField(label='Password' , widget=forms.PasswordInput) 
     password2 = forms.CharField(label='Confrim password' , widget=forms.PasswordInput) 
     class Meta:
@@ -25,7 +25,7 @@ class UserCreationForm(forms.modelform):#we will use in admin panel
        return user
 
 class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField(help_text = "you cant change password using <a href = \"../password/\" > this form</a>.")
+    password = ReadOnlyPasswordHashField(help_text = "you can change password using <a href = \"../password/\" > this form</a>.")
     
     class Meta:
         model = User
