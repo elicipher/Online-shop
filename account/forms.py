@@ -32,7 +32,7 @@ class UserChangeForm(forms.ModelForm):
         fields = ['email','phone_number','full_name' , 'password','last_login']
 
 class UserRegitrationForm(forms.Form):
-    
+    email = forms.EmailField(max_length=255)
     phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
