@@ -1,7 +1,8 @@
 from django import forms
-from .models import User
+from .models import User , OtpCode
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
 
 class UserCreationForm(forms.ModelForm):#we will use in admin panel
     password1 = forms.CharField(label='Password' , widget=forms.PasswordInput) 
@@ -36,4 +37,34 @@ class UserRegitrationForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        cd = self.cleaned_data
+
+        if not cd['full_name'] or cd['password'] or cd['email'] or cd['phone_number'] :
+            raise ValidationError("Please fill the form.")
+        
+        elif  User.objects.filter(email =cd['email']).exists():
+            raise ValidationError("This email is already exists")
+        
+        elif User.objects.filter(phone_number =cd['phone_number']).exists() :
+            raise ValidationError("This Number is already exists")
+        
+        return cd
+
+class VerfyCodeRegistrationForm(forms.Form):
+    code = forms.CharField(max_length=4 , label='verfy code')
+
+
+
+
+    
+
+
+        
+       
+
+    
+
+
 

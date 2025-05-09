@@ -27,7 +27,7 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
-#Otucode : one time code for login
+#Otpcode : one time code for login
 class OtpCode(models.Model):
     phone_number = models.CharField(max_length=11)
     code = models.PositiveSmallIntegerField()
