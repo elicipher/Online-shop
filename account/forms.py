@@ -32,28 +32,29 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = ['email','phone_number','full_name' , 'password','last_login']
 
-class UserRegitrationForm(forms.Form):
+class UserRegistrationForm(forms.Form):
     email = forms.EmailField(max_length=255)
     phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
 
-    def clean(self):
-        cd = self.cleaned_data
+    # def clean(self):
+    #     cd = self.cleaned_data
 
-        if not cd['full_name'] or cd['password'] or cd['email'] or cd['phone_number'] :
-            raise ValidationError("Please fill the form.")
+    #     if not cd['full_name'] or cd['password'] or cd['email'] or cd['phone_number'] :
+    #         raise ValidationError("Please fill the form.")
         
-        elif  User.objects.filter(email =cd['email']).exists():
-            raise ValidationError("This email is already exists")
+    #     elif  User.objects.filter(email =cd['email']).exists():
+    #         raise ValidationError("This email is already exists")
         
-        elif User.objects.filter(phone_number =cd['phone_number']).exists() :
-            raise ValidationError("This Number is already exists")
+    #     elif User.objects.filter(phone_number =cd['phone_number']).exists() :
+    #         raise ValidationError("This Number is already exists")
         
-        return cd
+    #     return cd
 
-class VerfyCodeRegistrationForm(forms.Form):
-    code = forms.CharField(max_length=4 , label='verfy code')
+class VerfyCodeForm(forms.Form):
+
+    code = forms.IntegerField(label='Verify code', min_value=1000, max_value=9999)
 
 
 

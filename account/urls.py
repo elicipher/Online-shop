@@ -4,5 +4,5 @@ from . import views
 app_name = 'account'
 urlpatterns = [
     path('register/',views.UserRegisterView.as_view(), name='user_register'),
-    path('verfy/',views.VerfyCodeRegistrationView.as_view(), name='verfy_code'),
+    path('verfy/',views.VerfyCodeView.as_view(), name='verfy_code'),
 ]
