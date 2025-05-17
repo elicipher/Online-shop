@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
+from django.utils import timezone 
+from datetime import timedelta
+
 # Create your models here.
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=255 , unique=True)
@@ -31,9 +34,12 @@ class User(AbstractBaseUser):
 class OtpCode(models.Model):
     phone_number = models.CharField(max_length=11)
     code = models.PositiveSmallIntegerField()
-    created = models.DateField(auto_now=True)
+    created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.phone_number} - {self.code}'
+    
+    def is_expired(self):
+        return timezone.now() > self.created + timedelta(minutes=1) #بررسی کد منقضی شده یا نه 
 
 

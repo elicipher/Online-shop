@@ -5,15 +5,22 @@ from django.contrib import messages
 import random
 from utils import send_otp_code
 from .models import OtpCode , User
+from datetime import timedelta, datetime, timezone 
 # Create your views here.
 
 class UserRegisterView(View):
     form_class = UserRegistrationForm
-
+    template_name = 'account/regiseter.html'
     def get(self , request):
-        form = self.form_class()
-        return render(request , 'account/regiseter.html', {'form':form})
+        user_data = request.session.get('user_registration_info')
+        form = self.form_class(initial=user_data) if user_data else self.form_class()
+        # if user_data:
+        #     form = self.form_class(initial=user_data)
+        # else:
+        #     form = self.form_class()
 
+        return render(request , self.template_name, {'form':form})
+    
     def post(self , request):
         form = self.form_class(request.POST)
         if form.is_valid():
@@ -32,8 +39,7 @@ class UserRegisterView(View):
             messages.success(request , 'we send you a code','success')
             return redirect('account:verfy_code')
         else :
-            messages.error(request , 'Registration failed.','danger')
-            return redirect("home:home")
+            return render(request , self.template_name, {'form':form})
         
         
         
@@ -45,12 +51,23 @@ class VerfyCodeView(View):
     def get(self , request):
         form = self.form_class()
         return render(request , 'account/verfy_code.html',{'form':form})
-
+    
     def post(self , request):
-
+        
         user_session = request.session['user_registration_info']
-        code_instance = OtpCode.objects.get(phone_number = user_session['phone_number'])
+        try:
+            code_instance = OtpCode.objects.get(phone_number=user_session['phone_number'])
+        except OtpCode.DoesNotExist:
+            messages.error(request , 'No code found. Try again.' , 'danger')
+            return redirect("account:user_register")
+        
         form = self.form_class(request.POST)
+
+        if code_instance.is_expired():
+            code_instance.delete()
+            messages.error(request , 'The code has expired. Try again.' , 'danger')
+            return redirect("account:user_register")
+        
         if form.is_valid():
             cd = form.cleaned_data
             if cd['code'] == code_instance.code :
@@ -66,5 +83,5 @@ class VerfyCodeView(View):
             else :
                 messages.error(request , 'this code is wrong' , 'danger')
                 return redirect("account:verfy_code")
-            
+        
         return redirect("home:home") 

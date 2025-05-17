@@ -33,24 +33,26 @@ class UserChangeForm(forms.ModelForm):
         fields = ['email','phone_number','full_name' , 'password','last_login']
 
 class UserRegistrationForm(forms.Form):
-    email = forms.EmailField(max_length=255)
-    phone_number = forms.CharField(max_length=11)
-    full_name = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(required=False,widget=forms.EmailInput(attrs={ "placeholder": "email"}),label='email',max_length=255)
+    phone_number = forms.CharField(required=False,widget=forms.TextInput(attrs={ "placeholder": "Phone number"}),max_length=11)
+    full_name = forms.CharField(required=False,widget=forms.TextInput(attrs={ "placeholder": "Full name"}) ,max_length=150)
+    password = forms.CharField(required=False,widget=forms.PasswordInput(attrs={ "placeholder": "Password"}) )
+    
+    def clean(self):
+        cd = self.cleaned_data
 
-    # def clean(self):
-    #     cd = self.cleaned_data
+        if not cd.get('full_name') or not cd.get('password') or not cd.get('email') or not cd.get('phone_number'):
+            raise ValidationError("Please fill the forms.")
+        
+        if User.objects.filter(email=cd.get('email')).exists():
+            self.add_error('email', "This email already exists")
 
-    #     if not cd['full_name'] or cd['password'] or cd['email'] or cd['phone_number'] :
-    #         raise ValidationError("Please fill the form.")
-        
-    #     elif  User.objects.filter(email =cd['email']).exists():
-    #         raise ValidationError("This email is already exists")
-        
-    #     elif User.objects.filter(phone_number =cd['phone_number']).exists() :
-    #         raise ValidationError("This Number is already exists")
-        
-    #     return cd
+        if User.objects.filter(phone_number=cd.get('phone_number')).exists():
+            self.add_error('phone_number', "This number already exists")
+
+        return cd
+
+
 
 class VerfyCodeForm(forms.Form):
 
