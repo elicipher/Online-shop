@@ -1,13 +1,13 @@
 from kavenegar import *
 
-def send_otp_code(phone_number , code):
+def send_otp_code(Subject,phone_number , code):
    
    try:
-      api = KavenegarAPI('376E74376E3643392F4B63655858796F7154674838363834733179727A4C4D6D48763447313377473452493D')
+      api = KavenegarAPI('41463741336C447569467271653658576F33634E545152477459317331586735572B7466446C7734432B4D3D')
       params = {
          'sender': '2000660110',#optional
          'receptor': phone_number,#multiple mobile number, split by comma
-         'message': f' «فروشگاه الی سایفر» \n کد تایید عضویت شما : \n {code}   ',
+         'message': f' «فروشگاه الی سایفر» \n کد تایید {Subject} شما : \n {code}   ',
       } 
       response = api.sms_send(params)
       print(response)

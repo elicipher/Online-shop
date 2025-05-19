@@ -39,7 +39,10 @@ class OtpCode(models.Model):
     def __str__(self):
         return f'{self.phone_number} - {self.code}'
     
-    def is_expired(self):
-        return timezone.now() > self.created + timedelta(minutes=1) #بررسی کد منقضی شده یا نه 
+    def check_and_delete_if_expired(self):
+        return timezone.now() > self.created + timedelta(minutes=2)
+
+      
+
 
 

@@ -33,6 +33,7 @@ class UserChangeForm(forms.ModelForm):
         fields = ['email','phone_number','full_name' , 'password','last_login']
 
 class UserRegistrationForm(forms.Form):
+
     email = forms.EmailField(required=False,widget=forms.EmailInput(attrs={ "placeholder": "email"}),label='email',max_length=255)
     phone_number = forms.CharField(required=False,widget=forms.TextInput(attrs={ "placeholder": "Phone number"}),max_length=11)
     full_name = forms.CharField(required=False,widget=forms.TextInput(attrs={ "placeholder": "Full name"}) ,max_length=150)
@@ -57,6 +58,24 @@ class UserRegistrationForm(forms.Form):
 class VerfyCodeForm(forms.Form):
 
     code = forms.IntegerField(label='Verify code', min_value=1000, max_value=9999)
+
+
+class LoginForm(forms.Form):
+
+    phone_number = forms.CharField(required=False,widget=forms.TextInput(attrs={ "placeholder": "Phone number"}),max_length=11)
+    password = forms.CharField(required=False,widget=forms.PasswordInput(attrs={ "placeholder": "Password"}) )
+
+    def clean(self):
+        phone_number = self.cleaned_data['phone_number']
+      
+        if  not User.objects.filter(phone_number =phone_number).exists():
+            self.add_error('phone_number',"This Number is not exists ")
+        if not phone_number :
+            self.add_error('phone_number',"Plaese fill the form")
+        
+
+            
+        return super().clean()
 
 
 
