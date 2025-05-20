@@ -40,7 +40,7 @@ class UserRegisterView(View):
             request.session['purpose'] = 'register'
 
             messages.success(request , 'we send you a code','success')
-            return redirect('account:verfy_code')
+            return redirect('account:verify_code')
         else :
             return render(request , self.template_name, {'form':form})
         
@@ -78,7 +78,7 @@ class LoginView(View):
                 OtpCode.objects.filter(phone_number = form.cleaned_data['phone_number']).delete()
                 OtpCode.objects.create(phone_number = form.cleaned_data['phone_number'] ,code = random_code)
                 messages.success(request , 'we send you a code','success')
-                return redirect('account:verfy_code')
+                return redirect('account:verify_code')
             else :
                 messages.error(request , "Password or number phone is wrong" , 'danger')
                 return render(request , self.template_name , {'form': form})
@@ -98,7 +98,7 @@ class VerfyCodeView(View):
 
     def get(self, request):
         form = self.form_class()
-        return render(request, 'account/verfy_code.html', {'form': form})
+        return render(request, 'account/verify_code.html', {'form': form})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -112,7 +112,7 @@ class VerfyCodeView(View):
             code_instance = OtpCode.objects.get(phone_number=phone_number)
         except OtpCode.DoesNotExist:
             messages.error(request, 'No code found. Try again.', 'danger')
-            return redirect("account:verfy_code")
+            return redirect("account:verify_code")
 
        
 
@@ -148,6 +148,8 @@ class VerfyCodeView(View):
                     return redirect("home:home")
             else:
                 messages.error(request, 'This code is wrong.', 'danger')
-                return redirect("account:verfy_code")
+                return redirect("account:verify_code")
+        messages.error(request, 'This code is wrong.', 'danger')
+        return redirect("account:verify_code")
 
         
