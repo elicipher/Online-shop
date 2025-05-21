@@ -125,6 +125,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# Media files
+MEDIA_URL = 'media/' #تو پوشه مدیا بریز
+MEDIA_ROOT = BASE_DIR / 'media' #تو ریشه برنامه و در پوشه مدیا ذخیر کن
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
