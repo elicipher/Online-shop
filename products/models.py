@@ -12,14 +12,18 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
-    
+
+from storages.backends.s3boto3 import S3Boto3Storage
+
+class MediaStorage(S3Boto3Storage):
+    location = 'media'   
 
 class Product(models.Model):
 
     category = models.ForeignKey(Category , on_delete=models.CASCADE , related_name="p_category")
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200 , unique= True)
-    imge = models.ImageField(upload_to='products/%Y/%m/%d')#نمایش سال و ماه و روزی که عکس آپلود شده
+    imge = models.ImageField(storage=MediaStorage(),upload_to='product/%Y/%m/%d')#نمایش سال و ماه و روزی که عکس آپلود شده
     description = models.TextField()
     price = models.IntegerField()
     availble = models.BooleanField(default=True)

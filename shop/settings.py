@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'kavenegar',
     'products.apps.ProductsConfig',
+    'storages',
     
 ]
 
@@ -126,8 +127,10 @@ STATICFILES_DIRS = [
 ]
 
 # Media files
-MEDIA_URL = 'media/' #تو پوشه مدیا بریز
-MEDIA_ROOT = BASE_DIR / 'media' #تو ریشه برنامه و در پوشه مدیا ذخیر کن
+
+
+# MEDIA_URL = 'media/' #تو پوشه مدیا بریز
+# MEDIA_ROOT = BASE_DIR / 'media' #تو ریشه برنامه و در پوشه مدیا ذخیر کن
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -135,3 +138,16 @@ MEDIA_ROOT = BASE_DIR / 'media' #تو ریشه برنامه و در پوشه م�
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
+
+#ARVAN CLUDE STORAGES
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = 'e9916666-9045-4fa1-9379-de785d59cd60'
+AWS_SECRET_ACCESS_KEY = '34f70dd670c2077d95bb73ed2fa9f7eac5b6d021846cf90ad67eccd107c65000'
+AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.ir'
+AWS_S3_REGION_NAME = "ir-thr-at1"
+AWS_STORAGE_BUCKET_NAME = 'ciphershop'
+AWS_SERVICE_NAME = 's3'
+# واسه وقتی اگه دوتا فایل هم نام آپلود شدن جایگزین نکن یه اسم جدید اضافه کن
+AWS_S3_FILE_OVERWRITE = False 
+AWS_DEFAULT_ACL = None
