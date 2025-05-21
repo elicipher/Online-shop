@@ -20,5 +20,12 @@ from django.urls import path , include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('home.urls' , namespace='home')),
-    path('account/',include('account.urls', namespace='account'))
+    path('account/',include('account.urls', namespace='account')),
+    path('',include('products.urls' , namespace='product')),
 ]
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#برای نمایش فایل ها تو حالت دولوپمنت
+#تو هاست واقعی این خط کد باید حذف بشه
