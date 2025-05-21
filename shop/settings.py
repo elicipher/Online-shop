@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'kavenegar',
+    'products.apps.ProductsConfig',
     
 ]
 
