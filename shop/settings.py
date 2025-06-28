@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wobbqg1ljtns#j*yzki)$zrr^$3z8i-yg6)k@22$r&nhfde!m7'
+SECRET_KEY = os.environ.get("SECRET_KEY","django-insecure-wobbqg1ljtns#j*yzki)$zrr^$3z8i-yg6)k@22$r&nhfde!m7")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG",True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS',"").split(",")
 
 
 # Application definition
@@ -151,3 +151,19 @@ AWS_SERVICE_NAME = 's3'
 # واسه وقتی اگه دوتا فایل هم نام آپلود شدن جایگزین نکن یه اسم جدید اضافه کن
 AWS_S3_FILE_OVERWRITE = False 
 AWS_DEFAULT_ACL = None
+from datetime import timedelta
+
+CELERY_BROKER_URL = os.environ.get("BROKER_URL","amqp://guest:guest@rabbitmq:5672/")
+CELERY_RESULT_BACKEND = os.environ.get("RESULT_BACKEND" , "rpc://")
+CELERY_TASK_SERIALIZER = os.environ.get("TASK_SERIALIZER","json") #تسک ها رو به فرمت جیسان تبدیل میکنه برای تبادل بین کلاینت و سرور
+CELERY_RESULT_SERIALIZER = os.environ.get("RESULT_SERIALIZER","pickle")
+CELERY_ACCEPT_CONTENT = os.environ.get("ACCEPT_CONTENT","json,pickle").split(",")#نوع داده هایی که مجاز هستن برای ما بیان
+CELERY_RESULT_EXPIRES = timedelta(days=1)#تاریخ انقضا تسک ها
+CELERY_TASK_ALWAYS_EAGER = os.environ.get("TASK_ALWAYS_EAGER",False)#کلاینت رو موقع اجرای تسک منتظر نمیزاره یا بلاک نمیکنه
+
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]

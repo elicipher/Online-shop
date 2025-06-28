@@ -1,0 +1,77 @@
+version: '3.8'
+
+services: 
+  rabbitmq :
+    image : rabbitmq:management
+    container_name : rabbitmq_onlie_shop
+    ports :
+      - "15672:15672"
+      - "5672:5672"
+    
+  django :
+      image : django
+      container_name : online_shop
+      build :
+        context : .
+        dockerfile : Dockerfile
+
+      command : sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8001"
+
+      volumes :
+        - .:/app
+        - ./static:/app/static
+        - ./templates:/app/templates
+
+      ports :
+        - "8001:8001"
+      
+      environment:
+        - ALLOWED_HOSTS=localhost,127.0.0.1
+        - DEBUG=True
+        - SECRET_KEY=django-insecure-wobbqg1ljtns#j*yzki)$zrr^$3z8i-yg6)k@22$r&nhfde!m7
+
+      depends_on :
+        - rabbitmq
+
+  celery :
+
+    container_name : celery
+    build :
+      context : .
+      dockerfile : Dockerfile
+    
+    command : celery --app=shop worker -l INFO
+    volumes :
+        - .:/app
+
+    
+      
+    environment:
+        - ALLOWED_HOSTS=localhost,127.0.0.1
+        - DEBUG=True
+        - SECRET_KEY=django-insecure-wobbqg1ljtns#yzki)$zrr^3z8i-yg6)k@22$r&nhfde!m7
+        - BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+        - RESULT_BACKEND=rpc://
+        - TASK_SERIALIZER=json
+        - RESULT_SERIALIZER=pickle
+        - ACCEPT_CONTENT=pickle,json
+        - TASK_ALWAYS_EAGER=False
+
+    depends_on :
+        - rabbitmq
+        - django
+
+
+
+    
+
+      
+
+      
+
+      
+      
+
+    
+    
+  
