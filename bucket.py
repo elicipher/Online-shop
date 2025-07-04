@@ -35,12 +35,15 @@ class Bucket:
                    return result
                else:
                    return None
-              
-                
-
+               
             except ClientError as exc:
                 logging.error(exc)
+
+    def delete_object(self , key):
+        self.s3_resource.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME , Key = key)
+        return True
+
             
-            return result
+            
 
 bucket = Bucket()
