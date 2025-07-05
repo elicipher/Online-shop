@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY","django-insecure-wobbqg1ljtns#j*yzki)$z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG",True)
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS',"").split(",")
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -153,7 +153,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 from datetime import timedelta
 
-CELERY_BROKER_URL = os.environ.get("BROKER_URL","amqp://guest:guest@rabbitmq:5672/")
+CELERY_BROKER_URL = os.environ.get("BROKER_URL","amqp://guest:guest@localhost:5672/")
 CELERY_RESULT_BACKEND = os.environ.get("RESULT_BACKEND" , "rpc://")
 CELERY_TASK_SERIALIZER = os.environ.get("TASK_SERIALIZER","json") #تسک ها رو به فرمت جیسان تبدیل میکنه برای تبادل بین کلاینت و سرور
 CELERY_RESULT_SERIALIZER = os.environ.get("RESULT_SERIALIZER","pickle")
