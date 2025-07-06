@@ -2,6 +2,7 @@ import boto3
 from django.conf import settings
 import logging 
 from botocore.exceptions import ClientError
+import os
 
 class Bucket:
     '''CDN bucket manager
@@ -42,8 +43,21 @@ class Bucket:
     def delete_object(self , key):
         self.s3_resource.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME , Key = key)
         return True
+    
+    def download_object(self, key):
+        local_path = os.path.join(settings.AWS_LOCAL_STORAGE, key)
+
+        # دایرکتوری‌های میانی رو بساز
+        os.makedirs(os.path.dirname(local_path), exist_ok=True)
+
+        with open(local_path, 'wb') as data:
+            self.s3_resource.download_fileobj(settings.AWS_STORAGE_BUCKET_NAME, key,data)
+        
+             
+        
+
 
             
-            
+
 
 bucket = Bucket()

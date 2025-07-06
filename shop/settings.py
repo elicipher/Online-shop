@@ -148,6 +148,8 @@ AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.ir'
 AWS_S3_REGION_NAME = "ir-thr-at1"
 AWS_STORAGE_BUCKET_NAME = 'ciphershop'
 AWS_SERVICE_NAME = 's3'
+AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/' #جای ذخیره سازی ابجکتی که دانلود میشه 
+
 # واسه وقتی اگه دوتا فایل هم نام آپلود شدن جایگزین نکن یه اسم جدید اضافه کن
 AWS_S3_FILE_OVERWRITE = False 
 AWS_DEFAULT_ACL = None
