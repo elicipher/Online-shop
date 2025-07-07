@@ -3,7 +3,7 @@ from django.views import View
 from .forms import UserRegistrationForm , VerfyCodeForm , LoginForm
 from django.contrib import messages
 import random
-from utils import send_otp_code
+from .tasks import send_otp_code_task
 from .models import OtpCode , User
 from django.contrib.auth import login ,authenticate , logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,7 +28,7 @@ class UserRegisterView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             random_code = random.randint(1000 , 9999)
-            send_otp_code("عضویت",form.cleaned_data['phone_number'],random_code)
+            send_otp_code_task.delay("عضویت",form.cleaned_data['phone_number'],random_code)
             OtpCode.objects.filter(phone_number = form.cleaned_data['phone_number']).delete()
             OtpCode.objects.create(phone_number =form.cleaned_data['phone_number'] , code =random_code)
             request.session['user_registration_info'] = {
@@ -74,7 +74,7 @@ class LoginView(View):
                 }
                 request.session['purpose'] = 'login'
                 random_code = random.randint(1000 , 9999)
-                send_otp_code("ورود",form.cleaned_data['phone_number'],random_code)
+                send_otp_code_task.delay("ورود",form.cleaned_data['phone_number'],random_code)
                 OtpCode.objects.filter(phone_number = form.cleaned_data['phone_number']).delete()
                 OtpCode.objects.create(phone_number = form.cleaned_data['phone_number'] ,code = random_code)
                 messages.success(request , 'we send you a code','success')
