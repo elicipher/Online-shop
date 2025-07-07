@@ -26,4 +26,10 @@
     </tr>
   </tbody>
 </table>
+<form method="post" action="{% url "home:upload_bucket_obj" %}"  enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">upload</button>
+</form>
+
 {% endblock  %}
