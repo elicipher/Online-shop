@@ -50,7 +50,7 @@ class UserRegistrationForm(forms.Form):
 
         if User.objects.filter(phone_number=cd.get('phone_number')).exists():
             self.add_error('phone_number', "This number already exists")
-
+        OtpCode.objects.filter(phone_number=cd.get('phone_number')).delete()#کد هایی که ازین شماره قبلا امده رو حذف کن
         return cd
 
 
@@ -73,7 +73,7 @@ class LoginForm(forms.Form):
         if not phone_number :
             self.add_error('phone_number',"Plaese fill the form")
         
-
+        OtpCode.objects.filter(phone_number=cd.get('phone_number')).delete()
             
         return super().clean()
 
