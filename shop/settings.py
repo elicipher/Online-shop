@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'kavenegar',
     'products.apps.ProductsConfig',
     'storages',
+    'django_celery_beat',
     
 ]
 
