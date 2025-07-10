@@ -1,7 +1,7 @@
 from django.shortcuts import render , redirect
 from django.views import View 
 from products.forms import UploadObjectForm
-from products.models import Product
+from products.models import Product ,Category
 from products.forms import UploadObjectForm
 from . import tasks
 from django.contrib import messages
@@ -12,9 +12,13 @@ from utils import IsAdminUserMixin
 
 # Create your views here.
 class HomeView(View):
-    def get(self, request):
+    def get(self, request , category_slug=None):
         products = Product.objects.filter(availble = True)
-        return render(request, 'home/index.html' , {'products': products})
+        categories = Category.objects.all()
+        if category_slug :
+            category = Category.objects.get(slug=category_slug)
+            products = products.filter(category=category)
+        return render(request, 'home/index.html' , {'products': products , 'categories':categories})
 
 class BucketHome(IsAdminUserMixin , View):
 
