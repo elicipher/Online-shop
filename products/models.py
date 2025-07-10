@@ -3,6 +3,8 @@ from django.urls import reverse
 
 # Create your models here.
 class Category(models.Model):
+    sub_category = models.ForeignKey("self",on_delete=models.CASCADE, null=True,blank=True,related_name="scategory")
+    is_sub = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200 , unique=True)
 
@@ -23,7 +25,7 @@ class MediaStorage(S3Boto3Storage):
 
 class Product(models.Model):
 
-    category = models.ForeignKey(Category , on_delete=models.CASCADE , related_name="p_category")
+    category = models.ManyToManyField(Category , related_name="p_category")
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200 , unique= True)
     imge = models.ImageField(storage=MediaStorage(),upload_to='product/%Y/%m/%d')#نمایش سال و ماه و روزی که عکس آپلود شده
