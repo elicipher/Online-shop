@@ -37,12 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Local apps
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
-    'kavenegar',
+    'order.apps.OrderConfig',
     'products.apps.ProductsConfig',
+
+    # Third-party apps
+    'kavenegar',
     'storages',
     'django_celery_beat',
+    
     
 ]
 

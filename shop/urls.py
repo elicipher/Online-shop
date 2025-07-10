@@ -22,6 +22,7 @@ urlpatterns = [
     path('',include('home.urls' , namespace='home')),
     path('account/',include('account.urls', namespace='account')),
     path('',include('products.urls' , namespace='product')),
+    path('order/',include('order.urls',namespace='order'))
 ]
 from django.conf import settings
 from django.conf.urls.static import static
