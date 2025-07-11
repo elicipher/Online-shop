@@ -7,6 +7,12 @@
     <img src="{{product.imge.url}}" style="width: 250px; height: 200px;">
     <p>{{product.price}} Toman </p> 
     <p>{{product.description}}</p> 
-    <small>{{product.created}}</small><br>
+    <small>{{product.created}}</small><br><br>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+         <button type="submit">Add product</button>
+
+    </form>
 
 {% endblock %}
