@@ -1,3 +1,5 @@
+from products.models import Product
+
 CART_SESSION_ID = 'cart'
 
 class Cart:
@@ -9,6 +11,20 @@ class Cart:
         if not cart :
             cart = self.session[CART_SESSION_ID] = {}
         self.cart = cart
+    
+    def __iter__(self ):
+        product_id = self.cart.keys() # آیدی محصولاتمو میگیرم - بهمون لیستی از آیدی ها رو برمیگردونه
+        products = Product.objects.filter(id__in =product_id ) #id__in چون لیست رو داریم نگاه میکنیم ازین استفاده میکنیم
+        cart = self.cart.copy()
+        for product in products:
+            self.cart[str(product.id)]['product'] = product #یا product.name
+
+        for item in self.cart.values() :
+            item["total_price"] = int(item['price']) * item['quantity']
+            yield item
+
+
+
 
     def add(self,product ,quantity):
         product_id = str(product.id)

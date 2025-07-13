@@ -8,16 +8,18 @@ from .forms import CartAddForm
 
 class CartView(View):
     def get(self,request):
-        return render(request , 'order/cart.html')
+        carts = Cart(request)
+        return render(request , 'order/cart.html',{"cart":carts})
 
 class CartAddView(View):
 
     def post(self , request , product_id):
-        cart = Cart()
+        cart = Cart(request)
         product = get_object_or_404(Product , id=product_id)
         form = CartAddForm(request.POST)
         if form.is_valid():
             cart.add(product , form.cleaned_data['quantity'])
 
+        
         return redirect("order:cart")
     
